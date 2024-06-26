@@ -45,6 +45,12 @@ impl Links for DagCborCodec {
     }
 }
 
+impl From<DagCborCodec> for u64 {
+    fn from(_: DagCborCodec) -> u64 {
+        RAW_CODE
+    }
+}
+
 impl TryFrom<u64> for DagCborCodec {
     type Error = NotDagCborCode;
 

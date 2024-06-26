@@ -1,5 +1,6 @@
 //! Implementation of ipld-core's `Codec` trait.
 
+use std::convert::TryFrom;
 use std::io::{BufRead, Write};
 
 use ipld_core::{
@@ -15,11 +16,13 @@ use crate::{de::Deserializer, error::CodecError};
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct DagCborCodec;
 
+const RAW_CODE: u64 = 0x71;
+
 impl<T> Codec<T> for DagCborCodec
 where
     T: for<'a> Deserialize<'a> + Serialize,
 {
-    const CODE: u64 = 0x71;
+    const CODE: u64 = RAW_CODE;
     type Error = CodecError;
 
     fn decode<R: BufRead>(reader: R) -> Result<T, Self::Error> {
@@ -41,3 +44,18 @@ impl Links for DagCborCodec {
             .into_iter())
     }
 }
+
+impl TryFrom<u64> for DagCborCodec {
+    type Error = NotDagCborCode;
+
+    fn try_from(code: u64) -> Result<Self, Self::Error> {
+        if code == RAW_CODE {
+            Ok(DagCborCodec)
+        } else {
+            Err(NotDagCborCode(code))
+        }
+    }
+}
+
+/// FIXME
+pub struct NotDagCborCode(pub u64);

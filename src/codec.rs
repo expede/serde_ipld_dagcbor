@@ -47,7 +47,7 @@ where
 impl Links for DagCborCodec {
     type LinksError = CodecError;
 
-    fn links(data: &[u8]) -> Result<impl Iterator<Item = Cid>, Self::LinksError> {
+    fn links(&self, data: &[u8]) -> Result<impl Iterator<Item = Cid>, Self::LinksError> {
         let mut deserializer = Deserializer::from_slice(data);
         Ok(ExtractLinks::deserialize(&mut deserializer)?
             .into_vec()

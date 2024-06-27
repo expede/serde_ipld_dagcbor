@@ -22,8 +22,18 @@ impl<T> Codec<T> for DagCborCodec
 where
     T: for<'a> Deserialize<'a> + Serialize,
 {
-    const CODE: u64 = RAW_CODE;
     type Error = CodecError;
+
+    fn to_code(&self) -> u64 {
+        RAW_CODE
+    }
+
+    fn try_from_code(code: u64) -> Option<Self> {
+        match code {
+            RAW_CODE => Some(DagCborCodec),
+            _ => None
+        }
+    }
 
     fn decode<R: BufRead>(reader: R) -> Result<T, Self::Error> {
         Ok(crate::from_reader(reader)?)

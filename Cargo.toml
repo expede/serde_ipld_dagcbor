@@ -16,7 +16,7 @@ edition = "2018"
 
 [dependencies]
 cbor4ii = { version = "0.2.14", default-features = false, features = ["use_alloc"] }
-ipld-core = { version = "0.4.1", default-features = false, features = ["serde"], git = "https://github.com/expede/ipld-core", branch = "compose-codecs" }
+ipld-core = { version = "0.4.1", default-features = false, features = ["serde"], git = "https://github.com/expede/rust-ipld-core", branch = "compose-codecs" }
 scopeguard = "1.1.0"
 serde = { version = "1.0.164", default-features = false, features = ["alloc"] }
 
